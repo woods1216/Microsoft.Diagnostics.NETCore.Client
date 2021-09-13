@@ -1,3 +1,3 @@
 dotnet build
 
-dotnet run ps <to see the list of processes and ids>
+dotnet run --project Projectame ps <to see the list of processes and ids>

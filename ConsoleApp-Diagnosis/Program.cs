@@ -1,4 +1,4 @@
-﻿//https://github.com/dotnet/diagnostics/blob/main/documentation/design-docs/diagnostics-client-library.md
+//https://github.com/dotnet/diagnostics/blob/main/documentation/design-docs/diagnostics-client-library.md
 //Abhisek Pramanik
 //https://www.youtube.com/watch?v=Rei6d9nKaFQ
 
@@ -38,6 +38,9 @@ public class RuntimeGCEventsPrinter
                 break;
             case "trace":
                 TraceProcessForDuration(Int32.Parse(args[1]), Int32.Parse(args[2]));
+                break;
+            case "cmd":
+                openCmdExperiment();
                 break;
 
         }
@@ -116,6 +119,38 @@ public static void PrintRuntimeGCEvents(int processId)
         {
             Console.WriteLine($"{process.ProcessName} {process.Id}");
         }
+    }
+
+
+    public static void openCmdExperiment()
+    {
+        //Vssadmin Delete Shadows /For=C: /Oldest
+        //https://www.winhelponline.com/blog/how-to-delete-system-restore-points-windows/
+        //
+        //https://docs.microsoft.com/en-us/troubleshoot/windows-server/backup-and-storage/automating-disk-cleanup-tool
+        // Define variables to track the peak
+        // memory usage of the process.
+        //long peakPagedMem = 0,
+        //     peakWorkingSet = 0,
+        //    peakVirtualMem = 0;
+
+        ProcessStartInfo ProcessInfo;
+        Process Process;
+
+        //ProcessInfo = new ProcessStartInfo("cmd.exe", "/K " + "Vssadmin Delete Shadows /For=C: /Oldest");
+        ProcessInfo = new ProcessStartInfo("cmd.exe", "/K " + "Vssadmin Delete Shadows /For=C: /Oldest");
+        ProcessInfo.CreateNoWindow = true;
+        ProcessInfo.UseShellExecute = true;
+
+        Process = Process.Start(ProcessInfo);
+
+        // Start the process.
+        //using (Process myProcess = Process.Start("notepad.exe"))
+        //{
+            // Display the process statistics until
+            // the user closes the program.
+            //https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.process.exitcode?redirectedfrom=MSDN&view=net-5.0#System_Diagnostics_Process_ExitCode
+        //}
     }
 
 }

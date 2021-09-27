@@ -17,7 +17,10 @@ using Process = System.Diagnostics.Process;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
-
+using System.Reflection;
+using System.Security.Principal;
+using System.Text;
+using System.Security.Permissions;
 
 public class RuntimeGCEventsPrinter
 
@@ -41,6 +44,9 @@ public class RuntimeGCEventsPrinter
                 break;
             case "cmd":
                 openCmdExperiment();
+                break;
+            case "ver":
+                GetFileVersion();
                 break;
 
         }
@@ -152,5 +158,55 @@ public static void PrintRuntimeGCEvents(int processId)
             //https://docs.microsoft.com/en-us/dotnet/api/system.diagnostics.process.exitcode?redirectedfrom=MSDN&view=net-5.0#System_Diagnostics_Process_ExitCode
         //}
     }
+
+    /*
+    public static void AdminRelauncher()
+    {
+        if (!IsRunAsAdmin())
+        {
+            ProcessStartInfo proc = new ProcessStartInfo();
+            proc.UseShellExecute = true;
+            proc.WorkingDirectory = Environment.CurrentDirectory;
+            proc.FileName = Assembly.GetEntryAssembly().CodeBase;
+
+            proc.Verb = "runas";
+
+            try
+            {
+                Process.Start(proc);
+                //Application.Current.Shutdown();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("This program must be run as an administrator! \n\n" + ex.ToString());
+            }
+        }
+    }
+
+    public bool IsRunAsAdmin()
+    {
+        WindowsIdentity id = WindowsIdentity.GetCurrent();
+        WindowsPrincipal principal = new WindowsPrincipal(id);
+
+       return principal.IsInRole(WindowsBuiltInRole.Administrator);
+    }
+    */
+
+    public static void GetFileVersion()
+    {
+        // Get the file version for the notepad.
+        FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(@"C:\Program Files\Bonjour\mDNSResponder.exe");
+
+        // Print the file name and version number.
+        String text = "File: " + myFileVersionInfo.FileDescription + '\n' +
+        "Version number: " + myFileVersionInfo.FileVersion;
+        Console.WriteLine(text);
+
+
+
+        //C: \Users\Abhisek Pramanik\source\repos\ConsoleApp - Diagnosis > dotnet run--project ConsoleApp-Diagnosis ver
+        //File: Bonjour Service
+        //Version number: 3,0,0,10
+     }
 
 }
